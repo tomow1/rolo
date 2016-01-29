@@ -21,7 +21,6 @@ pip install -r requirements.txt
 
 # install package.json and bower dependencies
 npm install
-bower install
 
 # deactivate virtualenv
 deactivate

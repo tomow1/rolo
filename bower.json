@@ -8,6 +8,10 @@
   "license": "ISC",
   "moduleType": [],
   "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
   "private": true,
   "ignore": [
     "**/.*",
