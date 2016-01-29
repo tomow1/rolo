@@ -5,6 +5,10 @@
   "author": "tomow1 <tomow1@users.noreply.github.com>",
   "license": "ISC",
   "contributors": [{}],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {},
