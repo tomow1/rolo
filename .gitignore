@@ -1,8 +1,23 @@
+# OSX
 .DS_Store
 .AppleDouble
 .LSOverride
 
+# Vagrant
 .vagrant/
 
+# Virtualenv
+.Python
+[Bb]in
+[Ii]nclude
+[Ll]ib
+[Ll]ib64
+[Ll]ocal
+[Ss]cripts
+pyvenv.cfg
+.venv
+pip-selfcheck.json
+
+# Node.js
 node_modules
 npm.debug.log
