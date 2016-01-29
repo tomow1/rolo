@@ -12,14 +12,15 @@ sudo apt-get install -y nodejs
 sudo npm install -g bower gulp yo
 
 # activate virtualenv
-cd /vagrant
+mkdir ~/venv && cd $_
 virtualenv venv
 . venv/bin/activate
 
 # install flask and other python dependencies
 pip install -r requirements.txt
 
-# install package.json and bower dependencies
+# install package.json
+cd /vagrant
 npm install
 
 # deactivate virtualenv
