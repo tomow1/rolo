@@ -13,8 +13,8 @@ sudo npm install -g bower gulp yo
 
 # activate virtualenv
 cd /vagrant
-virtualenv python-rolo
-. python-rolo/bin/activate
+virtualenv venv
+. venv/bin/activate
 
 # install flask and other python dependencies
 pip install -r requirements.txt
