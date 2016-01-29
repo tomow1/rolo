@@ -1,0 +1,19 @@
+{
+  "name": "rolo",
+  "description": "Rolling to do list, journal and reading list in Python",
+  "main": "index.js",
+  "authors": [
+    "tomow1 <tomow1@users.noreply.github.com>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "rolo",
+  "version": "1.0.0",
+  "description": "Rolling to do list, journal and reading list in Python",
+  "author": "tomow1 <tomow1@users.noreply.github.com>",
+  "license": "ISC",
+  "contributors": [{}],
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+}
