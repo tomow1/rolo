@@ -18,11 +18,11 @@ class Task(db.Model):
             name = self.name,
             completed = self.completed,
             dateAdded = self.dateAdded.isoformat(),
-            datePlanned = self.datePlanned.isoformat(),
-            dateCompleted = self.dateCompleted.isoformat(),
+            datePlanned = self.datePlanned.isoformat() if self.datePlanned is not None else None,
+            dateCompleted = self.dateCompleted.isoformat() if self.dateCompleted is not None else None,
             id = self.id
         )
 
-    
+
     def __repr__(self):
         return 'Task {}>'.format(self.id)

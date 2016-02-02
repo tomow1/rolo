@@ -6,6 +6,7 @@ from ..models.task import Task
 from ..schemas.task import task_schema, tasks_schema
 import json
 import datetime
+from sqlalchemy import null
 
 
 @api.route('/tasks', methods=['GET'])
@@ -28,9 +29,10 @@ def create_task():
     entity = Task(
         name = request.json['name']
         , completed = False
-        , dateAdded = datetime.datetime.strptime(request.json['dateAdded'], "%Y-%m-%d").date()
-        , datePlanned = datetime.datetime.strptime(request.json['datePlanned'], "%Y-%m-%d").date()
-        , dateCompleted = datetime.datetime.strptime(request.json['dateCompleted'], "%Y-%m-%d").date()
+        #, dateAdded = datetime.datetime.strptime(request.json['dateAdded'], "%Y-%m-%d").date()
+        , dateAdded = datetime.datetime.now().date()
+        , datePlanned = None
+        , dateCompleted = None
     )
     db.session.add(entity)
     db.session.commit()
