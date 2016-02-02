@@ -49,8 +49,8 @@ def update_task(id):
         name = request.json['name'],
         completed = request.json['completed'],
         dateAdded = datetime.datetime.strptime(request.json['dateAdded'], "%Y-%m-%d").date(),
-        datePlanned = datetime.datetime.strptime(request.json['datePlanned'], "%Y-%m-%d").date(),
-        dateCompleted = datetime.datetime.strptime(request.json['dateCompleted'], "%Y-%m-%d").date(),
+        datePlanned = datetime.datetime.strptime(request.json['datePlanned'], "%Y-%m-%d").date() if request.json['datePlanned'] is not None else None,
+        dateCompleted = datetime.datetime.strptime(request.json['dateCompleted'], "%Y-%m-%d").date() if request.json['dateCompleted'] is not None else None,
         id = id
     )
     db.session.merge(entity)
