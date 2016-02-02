@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, abort
 
 from . import api
 from .. import db
@@ -21,7 +21,7 @@ def get_task(id):
     entity = Task.query.get(id)
     if not entity:
         abort(404)
-    return task_schema.dumps(entity)
+    return json.dumps(entity.to_dict())
 
 
 @api.route('/tasks', methods=['POST'])
