@@ -6,12 +6,21 @@ from ..models.task import Task
 from ..schemas.task import task_schema, tasks_schema
 import json
 import datetime
-from sqlalchemy import null
+from sqlalchemy import null, or_
 
 
 @api.route('/tasks', methods=['GET'])
 def get_tasks():
     entities = Task.query.all()
+    return json.dumps([entity.to_dict() for entity in entities])
+    # return tasks_schema.dumps(entity)
+
+
+@api.route('/tasks/today', methods=['GET'])
+def get_current_tasks():
+    today = datetime.datetime.now().date()
+    print today
+    entities = Task.query.filter(or_(Task.completed == False, Task.dateCompleted == today)).filter(or_(Task.datePlanned == None, Task.datePlanned <= today))
     return json.dumps([entity.to_dict() for entity in entities])
     # return tasks_schema.dumps(entity)
 
