@@ -2,7 +2,7 @@
 
 import os
 
-from flask.ext.script import Manager
+from flask.ext.script import Manager, Server
 
 from app import create_app, db
 
@@ -14,6 +14,8 @@ manager = Manager(app)
 migrate = Migrate(app, db)
 
 manager.add_command('db', MigrateCommand)
+
+manager.add_command("runserver", Server(host='0.0.0.0'))
 
 def get_db_url():
     return str(db.engine.url)

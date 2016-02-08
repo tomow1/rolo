@@ -8,8 +8,11 @@ import json
 import datetime
 from sqlalchemy import null, or_
 
+from crossdomain import crossdomain
 
-@api.route('/tasks', methods=['GET'])
+
+@api.route('/tasks', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*', headers=['X-Requested-With, Content-Type'])
 def get_tasks():
     entities = Task.query.all()
     return json.dumps([entity.to_dict() for entity in entities])
@@ -25,7 +28,8 @@ def get_current_tasks():
     # return tasks_schema.dumps(entity)
 
 
-@api.route('/tasks/<int:id>', methods=['GET'])
+@api.route('/tasks/<int:id>', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*', headers=['X-Requested-With, Content-Type'])
 def get_task(id):
     entity = Task.query.get(id)
     if not entity:
@@ -34,7 +38,13 @@ def get_task(id):
 
 
 @api.route('/tasks', methods=['POST'])
+@crossdomain(origin='*', headers=['X-Requested-With, Content-Type'])
 def create_task():
+    #print request.headers
+    #print request.form
+    print request.data
+    print request.json
+    print request.form
     entity = Task(
         name = request.json['name']
         , completed = False
@@ -50,7 +60,9 @@ def create_task():
 
 
 @api.route('/tasks/<int:id>', methods=['PUT'])
+@crossdomain(origin='*', headers=['X-Requested-With, Content-Type'])
 def update_task(id):
+    print request.json
     entity = Task.query.get(id)
     if not entity:
         abort(404)

@@ -7,13 +7,13 @@ sudo apt-get install -y python python-pip git
 sudo pip install virtualenv
 
 # install node.js and bower, gulp and yeoman packages
-curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 sudo apt-get install -y nodejs
 sudo npm install -g bower gulp yo
 
 # activate virtualenv
 cd /vagrant
-rm -r venv
+#rm -r venv
 virtualenv venv
 . venv/bin/activate
 
@@ -21,7 +21,7 @@ virtualenv venv
 pip install -r requirements.txt
 
 # install package.json and bower dependencies
-rm -r node_modules
+#rm -r node_modules
 npm install
 
 # deactivate virtualenv
