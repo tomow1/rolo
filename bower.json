@@ -19,5 +19,10 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "normalize.styl": "^3.0.3",
+    "milligram-stylus": "a8c6568"
+  }
 }

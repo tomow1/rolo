@@ -1,33 +1,105 @@
 ReactDOM = require 'react-dom'
 React = require 'react'
 reqwest = require 'reqwest'
-http = require 'http'
+moment = require 'moment'
+
+TaskEditInline = React.createClass
+
+    getInitialState: ->
+      return (value: '')
+
+    handleChange: (e)->
+      @setState value: e.target.value
+      return
+
+    handleUpdate: (e)->
+      @props.updateTask
+        name: @state.value
+      return
+
+    handleInit: (e)->
+      @setState value: @props.originalValue
+      return
+
+    render: ->
+      <input
+        className="input-task-edit"
+        type="text"
+        value={@state.value}
+        onChange={@handleChange}
+        onBlurCapture={@handleUpdate}
+        onFocusCapture={@handleInit}
+        ref={(ref)->
+          if ref != null
+            ref.focus()
+          return
+        }
+      />
 
 Task = React.createClass
     displayName: 'Task'
 
     getInitialState: ->
-      return null
+      return (edit: false)
 
     handleClick: (e)->
-      @props.data.completed = !@props.data.completed
       @props.onTaskUpdate @props.data
 
-    handleChange: (e)->
-      e.preventDefault()
-      @setState completed: e.target.checked
+    handleComplete: (e)->
+      today = new Date()
       @props.onTaskUpdate
         id: @props.data.id
-        name: @props.data.name
-        completed: @state.completed
-        dateAdded: @props.data.dateAdded
-        datePlanned: @props.data.datePlanned
-        dateCompleted: @props.data.dateCompleted
+        completed: e.target.checked
+        dateCompleted: moment().format('YYYY-MM-DD')
       return
 
+    handleChange: (task)->
+      if task.name != @props.data.name
+        @props.onTaskUpdate
+          id: @props.data.id
+          name: task.name
+      @setState edit: false
+      return
+
+    handleDelete: (e)->
+      e.preventDefault()
+      @props.onTaskDelete
+        id: @props.data.id
+      return
+
+    putTaskIntoEdit: (e)->
+      e.preventDefault()
+      @setState edit: true
+
     render: ->
-      <li className={if @props.data.completed then 'complete' else 'incomplete'} >
-        <input type="checkbox" checked={@props.data.completed} onChange={@handleChange} />{@props.data.name}</li>
+      <div className="task row row-center" >
+        <div className="task-checkbox column column-10">
+          <input type="checkbox" checked={@props.data.completed} onChange={@handleComplete} />
+        </div>
+        <div className="column">
+          {if !@state.edit
+            <input type="text" onClickCapture={@putTaskIntoEdit}
+              className={if @props.data.completed then 'complete task input-task-label' else 'incomplete task input-task-label'}
+              value={@props.data.name}
+            />
+          else
+            <TaskEditInline
+              originalValue={@props.data.name}
+              updateTask={@handleChange}
+            />
+          }
+        </div>
+        <div className="column column-20">
+          <div className="task-delete-button">
+            <input
+              type="button"
+              value="del"
+              onClickCapture={@handleDelete}
+              className="button button-clear"
+            />
+          </div>
+        </div>
+      </div>
 
 
 NewTask = React.createClass
@@ -37,6 +109,7 @@ NewTask = React.createClass
       @setState name: e.target.value
 
     handleSubmit: (e)->
+      e.preventDefault()
       task = @state.name.trim()
       return if !task
       @props.onTaskSubmit
@@ -48,18 +121,32 @@ NewTask = React.createClass
       name: ''
 
     render: ->
-      <form onSubmit={@handleSubmit}>
-        <input
-          type="text"
-          placeholder="New Task"
-          value={@state.name}
-          onChange={@handleChange}
-        />
-        <input
-          type="submit"
-          value="add"
-        />
-      </form>
+      <div className="new-task">
+        <div className="row">
+          <div className="column datearea">
+            {moment().format('dddd, DD MMMM YYYY')}
+          </div>
+        </div>
+        <form onSubmit={@handleSubmit}>
+          <div className="row row-center">
+            <div className="column column-offset-10">
+              <input
+                className="input-task-edit"
+                type="text"
+                placeholder="New Task"
+                value={@state.name}
+                onChange={@handleChange}
+              />
+            </div>
+            <div className="column column-20">
+              <input
+                type="submit"
+                value="add"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
 
 
 Tasks = React.createClass
@@ -67,7 +154,7 @@ Tasks = React.createClass
 
     loadTasksFromApi: ->
       reqwest
-        url: 'http://172.28.128.3:5000/api/tasks'
+        url: 'http://172.28.128.3:5000/api/tasks/today'
         method: 'get'
         type: 'json'
         success: (resp)=>
@@ -98,12 +185,22 @@ Tasks = React.createClass
         success: (resp)=>
           #console.log resp
           #@setState @state.data.concat resp
+          @loadTasksFromApi()
           return
-      @loadTasksFromApi()
       return
 
-    putTaskIntoEdit: (edit)->
-      return !edit
+    deleteTaskFromApi: (task)->
+      reqwest
+        url: 'http://172.28.128.3:5000/api/tasks/' + task.id
+        method: 'delete'
+        type: 'json'
+        contentType: 'application/json'
+        success: (resp)=>
+          #console.log resp
+          #@setState @state.data.concat resp
+          @loadTasksFromApi()
+          return
+      return
 
     getInitialState: ->
       data: []
@@ -114,13 +211,16 @@ Tasks = React.createClass
       return
 
     render: ->
-      <div>
+      <div className="container">
         <NewTask onTaskSubmit={@submitNewTaskToApi}/>
-        <ul>
+        <form className="">
           {@state.data.map (data) =>
-            <Task key={data.id} data={data} onTaskUpdate={@updateTaskToApi}/>
+            <Task key={data.id} data={data}
+              onTaskUpdate={@updateTaskToApi}
+              onTaskDelete={@deleteTaskFromApi}
+            />
           }
-        </ul>
+        </form>
       </div>
 
 

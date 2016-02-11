@@ -19,10 +19,10 @@ def get_tasks():
     # return tasks_schema.dumps(entity)
 
 
-@api.route('/tasks/today', methods=['GET'])
+@api.route('/tasks/today', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*', headers=['X-Requested-With, Content-Type'])
 def get_current_tasks():
     today = datetime.datetime.now().date()
-    print today
     entities = Task.query.filter(or_(Task.completed == False, Task.dateCompleted == today)).filter(or_(Task.datePlanned == None, Task.datePlanned <= today))
     return json.dumps([entity.to_dict() for entity in entities])
     # return tasks_schema.dumps(entity)
@@ -40,11 +40,6 @@ def get_task(id):
 @api.route('/tasks', methods=['POST'])
 @crossdomain(origin='*', headers=['X-Requested-With, Content-Type'])
 def create_task():
-    #print request.headers
-    #print request.form
-    print request.data
-    print request.json
-    print request.form
     entity = Task(
         name = request.json['name']
         , completed = False
@@ -62,24 +57,28 @@ def create_task():
 @api.route('/tasks/<int:id>', methods=['PUT'])
 @crossdomain(origin='*', headers=['X-Requested-With, Content-Type'])
 def update_task(id):
-    print request.json
     entity = Task.query.get(id)
     if not entity:
         abort(404)
-    entity = Task(
-        name = request.json['name'],
-        completed = request.json['completed'],
-        dateAdded = datetime.datetime.strptime(request.json['dateAdded'], "%Y-%m-%d").date(),
-        datePlanned = datetime.datetime.strptime(request.json['datePlanned'], "%Y-%m-%d").date() if request.json['datePlanned'] is not None else None,
-        dateCompleted = datetime.datetime.strptime(request.json['dateCompleted'], "%Y-%m-%d").date() if request.json['dateCompleted'] is not None else None,
-        id = id
-    )
+
+    if 'name' in request.json:
+        entity.name = request.json['name']
+    if 'completed' in request.json:
+        entity.completed = request.json['completed']
+    if 'dateAdded' in request.json and request.json['dateAdded'] is not None:
+        entity.dateAdded = datetime.datetime.strptime(request.json['dateAdded'], "%Y-%m-%d").date()
+    if 'datePlanned' in request.json and request.json['datePlanned'] is not None:
+        entity.datePlanned = datetime.datetime.strptime(request.json['datePlanned'], "%Y-%m-%d").date()
+    if 'dateCompleted' in request.json and request.json['dateCompleted'] is not None:
+        entity.dateCompleted = datetime.datetime.strptime(request.json['dateCompleted'], "%Y-%m-%d").date()
+
     db.session.merge(entity)
     db.session.commit()
     return jsonify(entity.to_dict()), 200
 
 
 @api.route('/tasks/<int:id>', methods=['DELETE'])
+@crossdomain(origin='*', headers=['X-Requested-With, Content-Type'])
 def delete_task(id):
     entity = Task.query.get(id)
     if not entity:
