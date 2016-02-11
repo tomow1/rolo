@@ -154,7 +154,7 @@ Tasks = React.createClass
 
     loadTasksFromApi: ->
       reqwest
-        url: 'http://172.28.128.3:5000/api/tasks/today'
+        url: 'api/tasks/today'
         method: 'get'
         type: 'json'
         success: (resp)=>
@@ -164,7 +164,7 @@ Tasks = React.createClass
 
     submitNewTaskToApi: (task)->
       reqwest
-        url: 'http://172.28.128.3:5000/api/tasks'
+        url: 'api/tasks'
         method: 'post'
         type: 'json'
         contentType: 'application/json'
@@ -177,7 +177,7 @@ Tasks = React.createClass
     updateTaskToApi: (task)->
       #console.log task.completed
       reqwest
-        url: 'http://172.28.128.3:5000/api/tasks/' + task.id
+        url: 'api/tasks/' + task.id
         method: 'put'
         type: 'json'
         contentType: 'application/json'
@@ -191,7 +191,7 @@ Tasks = React.createClass
 
     deleteTaskFromApi: (task)->
       reqwest
-        url: 'http://172.28.128.3:5000/api/tasks/' + task.id
+        url: 'api/tasks/' + task.id
         method: 'delete'
         type: 'json'
         contentType: 'application/json'
