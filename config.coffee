@@ -29,3 +29,10 @@ module.exports =
             './src/assets/**/*.*'
         ]
         destination: './dist/'
+    deploy:
+        source: [
+            './dist/**/*.*'
+            '!./dist/index.html'
+        ]
+        static: './app/static/'
+        templates: './app/templates/'

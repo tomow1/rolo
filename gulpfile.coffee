@@ -146,6 +146,14 @@ gulp.task 'watch', ->
 
     watchScripts(config.scripts).on 'finish', browserSync.reload
 
+gulp.task 'deploy', ->
+    gulp
+      .src config.deploy.source
+      .pipe gulp.dest config.deploy.static
+    gulp
+      .src './dist/index.html'
+      .pipe gulp.dest config.deploy.templates
+
 gulp.task 'no-js', ['templates', 'styles', 'assets']
 gulp.task 'build', ['scripts', 'no-js']
 
