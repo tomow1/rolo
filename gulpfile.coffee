@@ -130,6 +130,11 @@ gulp.task 'assets', ->
         .src config.assets.source
         .pipe gulp.dest config.assets.destination
 
+gulp.task 'fonts', ->
+    gulp
+        .src config.fonts.source
+        .pipe gulp.dest config.fonts.destination
+
 gulp.task 'watch', ->
     browserSync.init
         server:
@@ -154,7 +159,7 @@ gulp.task 'deploy', ->
       .src './dist/index.html'
       .pipe gulp.dest config.deploy.templates
 
-gulp.task 'no-js', ['templates', 'styles', 'assets']
+gulp.task 'no-js', ['templates', 'styles', 'assets', 'fonts']
 gulp.task 'build', ['scripts', 'no-js']
 
 gulp.task 'default', ['no-js'], -> gulp.start 'watch'

@@ -1,8 +1,12 @@
 //@require '../../bower_components/normalize.styl/*'
 
-color-primary = #606c76
+//color-primary = #606c76
 
 @require '../../bower_components/milligram-stylus/dist/milligram.styl'
+
+$fa-font-path = "../fonts"
+
+@require '../../bower_components/Font-Awesome-Stylus/stylus/index'
 
 @keyframes highlight {
   0% {
@@ -15,6 +19,12 @@ color-primary = #606c76
 
 input, .button
   margin-bottom: inherit !important
+.button-icon
+  font-size: 1.6rem !important
+
+.disabled
+	background-color: color-quaternary !important
+	border: .1rem solid color-quaternary !important
 
 .task
   //animation: highlight 0.3s

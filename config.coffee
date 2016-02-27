@@ -3,7 +3,7 @@ module.exports =
         source: './src/coffee/main.coffee'
         extensions: ['.coffee']
         transforms: ['coffee-reactify', 'envify']
-        destination: './dist/js/'
+        destination: './dist/static/js/'
         filename: 'bundle.js'
     templates:
         source: './src/jade/*.jade'
@@ -12,7 +12,10 @@ module.exports =
     styles:
         source: './src/stylus/style.styl'
         watch: './src/stylus/*.styl'
-        destination: './dist/css/'
+        destination: './dist/static/css/'
+    fonts:
+        source: './bower_components/Font-Awesome-Stylus/fonts/*.*'
+        destination: './dist/static/fonts'
     assets:
         source: [
             './src/favicon.ico'
@@ -28,11 +31,11 @@ module.exports =
             './src/robots.txt'
             './src/assets/**/*.*'
         ]
-        destination: './dist/'
+        destination: './dist/static/'
     deploy:
         source: [
-            './dist/**/*.*'
-            '!./dist/index.html'
+            './dist/static/**/*.*'
+            '!./dist/**/*.html'
         ]
         static: './app/static/'
         templates: './app/templates/'

@@ -40,7 +40,8 @@ Task = React.createClass
     displayName: 'Task'
 
     getInitialState: ->
-      return (edit: false)
+      return edit: false,
+      taskProps: false
 
     handleClick: (e)->
       @props.onTaskUpdate @props.data
@@ -71,34 +72,56 @@ Task = React.createClass
       e.preventDefault()
       @setState edit: true
 
+    showTaskProperties: (e)->
+      e.preventDefault()
+      @setState taskProps: true
+
+    hideTaskProperties: (e)->
+      e.preventDefault()
+      @setState taskProps: false
+
     render: ->
-      <div className="task row row-center" >
-        <div className="task-checkbox column column-10">
-          <input type="checkbox" checked={@props.data.completed} onChange={@handleComplete} />
-        </div>
-        <div className="column">
-          {if !@state.edit
-            <input type="text" onClickCapture={@putTaskIntoEdit}
-              className={if @props.data.completed then 'complete task input-task-label' else 'incomplete task input-task-label'}
-              value={@props.data.name}
-            />
-          else
-            <TaskEditInline
-              originalValue={@props.data.name}
-              updateTask={@handleChange}
-            />
-          }
-        </div>
-        <div className="column column-20 task-delete-button">
-          <div className="">
-            <input
-              type="button"
-              value="del"
-              onClickCapture={@handleDelete}
-              className="button button-clear"
-            />
+      <div>
+        <div className="task row row-center" >
+          <div className="task-checkbox column column-10">
+            <input type="checkbox" checked={@props.data.completed} onChange={@handleComplete} />
+          </div>
+          <div className="column">
+            {if !@state.edit
+              <input type="text" onClickCapture={@putTaskIntoEdit}
+                className={if @props.data.completed then 'complete task input-task-label' else 'incomplete task input-task-label'}
+                value={@props.data.name}
+              />
+            else
+              <TaskEditInline
+                originalValue={@props.data.name}
+                updateTask={@handleChange}
+              />
+            }
+          </div>
+          <div className="column column-20 task-delete-button">
+            <div className="">
+              {if @state.taskProps
+                <button
+                  onClickCapture={@hideTaskProperties}
+                  className="button button-clear button-icon">
+                  <i className="fa fa-chevron-circle-up "></i>
+                </button>
+              else
+                <button
+                  onClickCapture={@showTaskProperties}
+                  className="button button-clear button-icon">
+                  <i className="fa fa-chevron-circle-down"></i>
+                </button>
+              }
+            </div>
           </div>
         </div>
+        {if @state.taskProps
+          <div className="task row row-center">
+            hello
+          </div>
+        }
       </div>
 
 
@@ -140,6 +163,7 @@ NewTask = React.createClass
             </div>
             <div className="column column-20">
               <input
+                className={if @state.name == '' then 'disabled'}
                 type="submit"
                 value="add"
               />
@@ -164,7 +188,7 @@ Tasks = React.createClass
 
     submitNewTaskToApi: (task)->
       reqwest
-        url: 'localhost:5000/api/tasks'
+        url: 'http://localhost:5000/api/tasks'
         method: 'post'
         type: 'json'
         contentType: 'application/json'
@@ -177,7 +201,7 @@ Tasks = React.createClass
     updateTaskToApi: (task)->
       #console.log task.completed
       reqwest
-        url: 'localhost:5000/api/tasks/' + task.id
+        url: 'http://localhost:5000/api/tasks/' + task.id
         method: 'put'
         type: 'json'
         contentType: 'application/json'
@@ -191,7 +215,7 @@ Tasks = React.createClass
 
     deleteTaskFromApi: (task)->
       reqwest
-        url: 'localhost:5000/api/tasks/' + task.id
+        url: 'http://localhost:5000/api/tasks/' + task.id
         method: 'delete'
         type: 'json'
         contentType: 'application/json'
