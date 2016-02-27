@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 # install package.json and bower dependencies
 #rm -r node_modules
-npm install
+#npm install
 
 # deactivate virtualenv
 deactivate
