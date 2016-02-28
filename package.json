@@ -39,6 +39,7 @@
     "pretty-hrtime": "^1.0.1",
     "qwery": "^4.0.0",
     "react": "^0.14.7",
+    "react-date-picker": "^4.0.8",
     "react-dom": "^0.14.7",
     "reqwest": "^2.0.5",
     "vinyl-buffer": "^1.0.0",

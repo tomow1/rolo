@@ -2,6 +2,7 @@ ReactDOM = require 'react-dom'
 React = require 'react'
 reqwest = require 'reqwest'
 moment = require 'moment'
+DatePicker = require 'react-date-picker'
 
 TaskEditInline = React.createClass
 
@@ -75,10 +76,19 @@ Task = React.createClass
     showTaskProperties: (e)->
       e.preventDefault()
       @setState taskProps: true
+      @setState datePlanned: @props.data.datePlanned
 
     hideTaskProperties: (e)->
       e.preventDefault()
       @setState taskProps: false
+
+    taskPlanDate: (dateString, moment)->
+      # e.preventDefault()
+      console.log dateString
+      if dateString != @props.data.datePlanned
+        @props.onTaskUpdate
+          id: @props.data.id
+          datePlanned: dateString
 
     render: ->
       <div>
@@ -119,7 +129,12 @@ Task = React.createClass
         </div>
         {if @state.taskProps
           <div className="task row row-center">
-            hello
+            <div className="column column-33 column-offset-10">
+              <DatePicker
+                date={@props.data.datePlanned}
+                onChange={@taskPlanDate}
+              />
+            </div>
           </div>
         }
       </div>
